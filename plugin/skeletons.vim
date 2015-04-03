@@ -2,7 +2,7 @@ if !exists('g:skeletons_dir')
     let g:skeletons_dir = expand('<sfile>:p:h:h') . '/skeletons/'
 endif
 
-function! s:initSkeleton()
+function! InitSkeleton()
     let filetype      = &filetype
     let skeletonPath = s:getSkeletonPath(filetype)
 
@@ -24,4 +24,4 @@ function! s:getSkeleton(filetype)
     return join(readfile(s:getSkeletonPath(a:filetype)), "\n")
 endfunction!
 
-au BufNewFile * call s:initSkeleton()
+au BufNewFile * call InitSkeleton()
