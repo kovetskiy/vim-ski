@@ -33,3 +33,19 @@ function! s:getSkeleton(skeletonName)
 endfunction!
 
 au BufNewFile * Skeleton
+
+function! SetSkeletonFiletype()
+    let filename = expand("%")
+    let splitted = split(filename, "\\.")
+
+    if len(splitted) >= 2
+        let filetype = splitted[len(splitted) - 2]
+        exec "set ft=" . filetype
+    endif
+endfunction!
+
+command! -bar
+    \ SetSkeletonFiletype
+    \ call SetSkeletonFiletype()
+
+au BufNewFile,BufRead *.skeleton SetSkeletonFiletype
