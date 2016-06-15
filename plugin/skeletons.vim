@@ -3,10 +3,14 @@ if !exists('g:skeletons_dir')
 endif
 
 function! Skeleton()
-    let filetype      = &filetype
-    let skeletonPath = s:getSkeletonPath(filetype)
+    let filetype = &filetype
+    let filename = expand("%")
+    let skeletonPathFiletype = s:getSkeletonPath(filetype)
+    let skeletonPathFilename = s:getSkeletonPath(filename)
 
-    if filereadable(skeletonPath)
+    if filereadable(skeletonPathFilename)
+       call feedkeys("i\<C-R>=SkeletonExpand('" . filename . "')\<CR>")
+    elseif filereadable(skeletonPathFiletype)
        call feedkeys("i\<C-R>=SkeletonExpand('" . filetype . "')\<CR>")
     endif
 endfunction!
@@ -20,12 +24,28 @@ function! SkeletonExpand(filetype)
     return UltiSnips#Anon(skeleton)
 endfunction!
 
-function! s:getSkeletonPath(filetype)
-    return g:skeletons_dir . a:filetype . '.skeleton'
+function! s:getSkeletonPath(skeletonName)
+    return g:skeletons_dir . a:skeletonName . '.skeleton'
 endfunction!
 
-function! s:getSkeleton(filetype)
-    return join(readfile(s:getSkeletonPath(a:filetype)), "\n")
+function! s:getSkeleton(skeletonName)
+    return join(readfile(s:getSkeletonPath(a:skeletonName)), "\n")
 endfunction!
 
 au BufNewFile * Skeleton
+
+function! SetSkeletonFiletype()
+    let filename = expand("%")
+    let splitted = split(filename, "\\.")
+
+    if len(splitted) >= 2
+        let filetype = splitted[len(splitted) - 2]
+        exec "set ft=" . filetype
+    endif
+endfunction!
+
+command! -bar
+    \ SetSkeletonFiletype
+    \ call SetSkeletonFiletype()
+
+au BufNewFile,BufRead *.skeleton SetSkeletonFiletype
