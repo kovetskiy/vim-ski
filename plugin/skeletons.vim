@@ -3,6 +3,10 @@ if !exists('g:skeletons_dir')
 endif
 
 function! Skeleton()
+    if input("Use skeleton? y/N ") != "y"
+        return
+    endif
+
     let filetype = &filetype
     let filename = expand("%")
     let skeletonPathFiletype = s:getSkeletonPath(filetype)
