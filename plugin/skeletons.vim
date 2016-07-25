@@ -1,10 +1,14 @@
 if !exists('g:skeletons_dir')
     let g:skeletons_dir = expand('<sfile>:p:h:h') . '/skeletons/'
+    let g:skeletons_use_by_default = 1
 endif
 
 function! Skeleton()
-    if input("Use skeleton? y/N ") != "y"
-        return
+    if g:skeletons_use_by_default != 1
+        let answer = input("Use skeleton? Y/n ")
+        if answer != "" && answer != "y"
+            return
+        endif
     endif
 
     let filetype = &filetype
