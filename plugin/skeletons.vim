@@ -32,8 +32,6 @@ function! s:getSkeleton(skeletonName)
     return join(readfile(s:getSkeletonPath(a:skeletonName)), "\n")
 endfunction!
 
-au BufNewFile * Skeleton
-
 function! SetSkeletonFiletype()
     let filename = expand("%")
     let splitted = split(filename, "\\.")
@@ -48,4 +46,8 @@ command! -bar
     \ SetSkeletonFiletype
     \ call SetSkeletonFiletype()
 
-au BufNewFile,BufRead *.skeleton SetSkeletonFiletype
+augroup vim_ski
+    au!
+    au BufNewFile * Skeleton
+    au BufNewFile,BufRead *.skeleton SetSkeletonFiletype
+augroup end
